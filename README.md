@@ -1,24 +1,43 @@
-# MacroscopiX - Pack de Validation CHU
-
-Bienvenue sur le **Pack de Validation Technique et de Sécurité** officiel de MacroscopiX, destiné aux DSI et RSSI.
-
-Ce dépôt contient l'ensemble des documents nécessaires à l'audit et à l'homologation de la solution en environnement hospitalier.
-
-## 📂 Liste des Documents
-
-- **Synthèse Technique** ([00_SYNTHESE_...](./00_SYNTHESE_TECHNIQUE_VALIDATION_CHU.md)) : Résumé des flux et de l'architecture.
-- **DATS** ([01_DATS.docx](./01_DATS.docx)) : Dossier d'Architecture Technique et de Sécurité.
-- **Audits Mobiles & API** : Analyses détaillées de la sécurité des terminaux et des serveurs.
-- **Schémas d'Architecture** : Visualisation des flux de données chiffrés.
-
-## 🔒 Sécurité & Confidentialité
-MacroscopiX est conçu selon les principes du **Privacy by Design** :
-- **Hébergement** : Compatible On-Premise ou Cloud certifié HDS.
-- **Zéro Stockage Mobile** : Aucune donnée de santé n'est persistée sur le terminal mobile.
-- **Identitovigilance** : Nommage automatisé via scan de code-barre (évite les erreurs de saisie).
-
-## 🚀 À propos de MacroscopiX
-MacroscopiX permet aux pathologistes de numériser leurs pièces opératoires d'un simple geste, garantissant une traçabilité totale et une intégration fluide avec le SGL.
+# Synthèse Technique - Dossier de Validation CHU
+**Projet : MacroscopiX**  
+**Version : 2.5 (Production - Mars 2026)**  
+**Statut : Validé pour exploitation hospitalière**
 
 ---
-© 2026 MacroscopiX - Tous droits réservés.
+
+## 📂 Accès aux Documents du Pack
+- **DATS** ([01_DATS.docx](./01_DATS.docx)) : Dossier d'Architecture Technique et de Sécurité.
+- **Audits Mobiles & API** : Analyses détaillées de la sécurité des terminaux et des serveurs.
+- **Schémas d'Architecture** ([Archi.png](./Archi.png)) : Visualisation des flux de données chiffrés.
+
+---
+
+## 1. Présentation du Système
+MacroscopiX est une solution de macroscopie mobile permettant l'acquisition sécurisée de clichés photographiques à la paillasse via des terminaux Android standards. La solution vise à supprimer le "Shadow IT" (utilisation de téléphones personnels sans cadre sécurisé) et à automatiser l'intégration des photos dans le Système de Gestion de Laboratoire (SGL).
+
+## 2. Architecture Technique
+L'écosystème repose sur quatre piliers isolés :
+1. **Terminal Mobile (Android)** : Application native gérant l'acquisition et le chiffrement en RAM.
+2. **API Dispatcher (FastAPI)** : Orchestrateur central gérant l'authentification et la configuration des terminaux.
+3. **Serveur de Stockage (WebDAV/S3)** : Réceptacle final des images (HDS ou On-Premise).
+4. **Agent de Synchronisation (Windows)** : Service local assurant le transfert transparent des images vers le SGL.
+
+## 3. Sécurité & Confidentialité des Données
+La sécurité est au cœur de la conception "Security by Design" de MacroscopiX :
+- **Zéro Persistance Mobile** : Aucune donnée de santé (image ou identité) n'est stockée de façon permanente sur le téléphone. Le traitement se fait exclusivement en mémoire vive (RAM).
+- **Chiffrement des Flux** : Tous les transferts sont chiffrés via TLS 1.3 (HTTPS/WebDAVS).
+- **Authentification Forte** : Double validation via code OTP (One-Time Password) et liaison matérielle unique (Device UUID).
+- **Identitovigilance** : L'acquisition commence obligatoirement par le scan du code-barre du dossier patient, garantissant un nommage automatique sans erreur de saisie.
+
+## 4. Modalités d'Hébergement
+La solution offre une flexibilité totale pour s'adapter aux exigences des DSI :
+- **Option On-Premise** : Installation sur les serveurs internes du CHU (contrôle total des données).
+- **Option Cloud HDS** : Hébergement sur une infrastructure certifiée "Hébergeur de Données de Santé" (externalisation sécurisée).
+
+## 5. État des Fonctionnalités (Production vs R&D)
+*Note importante pour la validation :*
+- **Fonctionnalités Activées** : Capture sécurisée, Scan Code-barre, Nommage dynamique, Transfert SGL, Journalisation des accès.
+- **Fonctionnalités en cours de déploiement (R&D)** : Les modules d'Intelligence Artificielle (**YOLO v8**) pour la détection d'organes et les mires de calibration (**ArUco**) pour la mesure automatique ne sont **pas encore activés en production**. Ils feront l'objet d'une validation ultérieure.
+
+---
+**Document établi pour servir de base à l'audit technique et à la validation DSI / RGPD.**
