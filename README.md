@@ -36,8 +36,10 @@ La sécurité est au cœur de la conception "Security by Design" de MacroscopiX 
 
 ## 4. Modalités d'Hébergement
 La solution offre une flexibilité totale pour s'adapter aux exigences des DSI :
-- **Option On-Premise** : Installation sur les serveurs internes du CHU (contrôle total des données).
-- **Option Cloud HDS** : Hébergement sur une infrastructure certifiée "Hébergeur de Données de Santé" (externalisation sécurisée).
+- **Option On-Premise** : Installation sur les serveurs internes du CHU (contrôle total des données).  
+  *Note : L'utilisation de terminaux personnels (BYOD) dans cette configuration dépend exclusivement de la politique de sécurité interne du CHU et de l'accessibilité du réseau local (WiFi/VPN).*
+- **Option Cloud HDS** : Hébergement sur une infrastructure certifiée "Hébergeur de Données de Santé" (externalisation sécurisée).  
+  *Note : Cette configuration facilite techniquement l'usage en mobilité et sur terminaux personnels (4G/Internet sécurisé), tout en restant soumise à l'approbation de la DSI.*
 
 ## 5. État des Fonctionnalités (Production vs R&D)
 *Note importante pour la validation :*
