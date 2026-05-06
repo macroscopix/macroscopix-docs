@@ -5,10 +5,15 @@
 
 ---
 
-## 📂 Accès aux Documents du Pack
-- **DATS** ([01_DATS.docx](./01_DATS.docx)) : Dossier d'Architecture Technique et de Sécurité.
-- **Audits Mobiles & API** : Analyses détaillées de la sécurité des terminaux et des serveurs.
-- **Schémas d'Architecture** ([Archi.png](./Archi.png)) : Visualisation des flux de données chiffrés.
+## 📂 Accès aux Documents du Pack (Lecture directe sur GitHub)
+
+- **DATS** ([Version MD](./01_DATS.md) | [Version Word](./01_DATS.docx))
+- **Audit Mobile** ([Version MD](./02_Audit_Mobile.md) | [Version Word](./02_Audit_Mobile.docx))
+- **Audit API** ([Version MD](./03_Audit_API.md) | [Version Word](./03_Audit_API.docx))
+- **Audit Admin** ([Version MD](./04_Audit_Admin.md) | [Version Word](./04_Audit_Admin.docx))
+- **Audit WebDAV HDS** ([Version MD](./05_Audit_Webdav_HDS.md) | [Version Word](./05_Audit_Webdav_HDS.docx))
+- **Audit Sync Service** ([Version MD](./06_Audit_Sync_Service.md) | [Version Word](./06_Audit_Sync_Service.docx))
+- **Schémas d'Architecture** ([Archi.png](./Archi.png))
 
 ---
 
