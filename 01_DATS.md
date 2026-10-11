@@ -251,16 +251,20 @@ CHU. L'ensemble des connexions est initié en sortie (HTTPS standard sortant por
 - **Authentification forte :** Jeton unique par terminal avec liaison matérielle au `device_uuid`.
 - **Validation SSL stricte :** Vérification systématique de la chaîne de certification.
 
-### 4.3 Hébergement et stockage HDS
+### 4.3 Hébergement HDS et Zéro Persistance Serveur (Architecture Stateless)
 
-- **Zone HDS multi-fournisseurs français :**
-  - **Serveur WebDAV (compute)** : hébergé chez Scalingo (certifié HDS et ISO 27001).
-  - **Stockage objet (S3)** : hébergé chez Hosteur (certifié HDS et ISO 27001).
-- **Chiffrement au repos :** Chiffrement natif AES-256 (SSE-S3).
-- **Isolation logique forte :**
-  - Un dossier racine dédié et étanche par établissement.
-  - Un jeton WebDAV unique par dossier racine.
-  - Rejet des accès croisés.
+La solution met en œuvre un principe strict de **non-persistance des données de santé sur le serveur** :
+
+- **Traitement Stateless en Mémoire Vive (RAM) :**
+  - Le serveur WebDAV (compute Scalingo HDS) ne dispose d'aucun stockage disque persistant pour les données de santé.
+  - Les fichiers entrants transitent exclusivement dans des buffers mémoires (`BytesIO`). Aucun fichier temporaire ou résidu n'est écrit sur le système de fichiers de l'instance d'exécution.
+- **Double Mécanisme de Purge Cloud :**
+  1. **Purge Immédiate par l'Agent Local (Nominale) :** Dès que l'agent `MacroscopixSync` a rapatrié le fichier sur le stockage de l'établissement et validé son intégrité octet par octet (`Content-Length`), il envoie immédiatement une commande HTTP `DELETE`. Le fichier est instantanément supprimé du bucket S3 HDS.
+  2. **Purge Automatique Programmée (Filet de sécurité Lifecycle 24h) :** Une règle de cycle de vie (**S3 Lifecycle Policy**) est configurée nativement sur le stockage objet HDS (Hosteur). Tout fichier présent depuis plus de 24 heures (ex. en cas de panne prolongée ou de coupure réseau du poste hospitalier) est **détruit automatiquement et irréversiblement** sans intervention humaine.
+- **Sécurité et Souveraineté du Stockage :**
+  - Hébergement 100 % français sur infrastructures certifiées **HDS (Hébergeur de Données de Santé)** et ISO 27001.
+  - Chiffrement natif au repos AES-256 (SSE-S3).
+  - Cloisonnement étanche : chaque établissement dispose d'un espace racine isolé et d'un jeton d'accès exclusif (`chroot`).
 
 ### 4.4 Dispositif de Quarantaine et Intégrité
 
