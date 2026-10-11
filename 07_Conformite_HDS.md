@@ -18,30 +18,30 @@ L'architecture Cloud de transit de MacroscopiX repose **exclusivement sur des so
 
 Toutes les données de santé transitant par MacroscopiX sont traitées et stockées **100 % sur le territoire français**, sous souveraineté juridique européenne (RGPD), sans transfert vers des juridictions tierces.
 
-| Fournisseur | Rôle dans l'Architecture | Datacenters | Certifications Détenues | Référencement Officiel ANS |
-|---|---|---|---|---|
-| **SCALINGO** (Scalingo SAS) | **Serveur de Calcul WebDAV** (Compute, traitement en mémoire vive RAM) | Paris / Roubaix (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• Hébergeur d'Infrastructures & Infogéreur | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
-| **SCALEWAY** (Scaleway SAS - Groupe iliad) | **Stockage Objet S3 HDS** (Chiffrement AES-256 natif au repos, rétention tampon) | Région Paris `fr-par` / DC2-DC3-DC5 (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• **ISO 50001** / Souveraineté UE | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
-| **INFOMANIAK** (Infomaniak Network SA) | **Serveur d'Enrôlement / Gestion Admin** *(Hors périmètre HDS : 0 donnée de santé)* | Genève (Suisse, adéquation RGPD) | • **ISO 27001**<br>• **ISO 9001**<br>• Tier III+ souverain | *N/A (Uniquement métadonnées techniques)* |
+| Fournisseur | Rôle dans l'Architecture | Datacenters | Certifications Détenues (Référentiel ANS HDS v2.0) | Organisme Certificateur | Référencement Officiel ANS |
+|---|---|---|---|---|---|
+| **SCALINGO** (Scalingo SAS) | **Serveur de Calcul WebDAV** (Compute, traitement en mémoire vive RAM) | Paris / Roubaix (France) | • **HDS v2.0 : Activités 1, 2, 3, 4, 5, 6**<br>• Hébergeur d'Infrastructures & Infogéreur<br>• **ISO 27001:2022** | **BYCYB** | [Fiche officielle ANS](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
+| **SCALEWAY** (Scaleway SAS - Groupe iliad) | **Stockage Objet S3 HDS** (Chiffrement AES-256 natif au repos, rétention tampon) | Région Paris `fr-par` / DC2-DC3-DC5 (France) | • **HDS v2.0 : Activités 1, 2, 3, 4** (Hébergeur d'Infrastructure Physique et Virtuelle)<br>• **ISO 27001:2022** / ISO 50001 | **BSI Group** | [Fiche officielle ANS](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
+| **INFOMANIAK** (Infomaniak Network SA) | **Serveur d'Enrôlement / Gestion Admin** *(Hors périmètre HDS : 0 donnée de santé)* | Genève (Suisse, adéquation RGPD) | • **ISO 27001**<br>• **ISO 9001**<br>• Tier III+ souverain | SQS | *N/A (Métadonnées techniques)* |
 
 > **Lien officiel de vérification de l'État :**  
-> La liste exhaustive des hébergeurs certifiés HDS délivrée par les organismes accrédités (AFNOR, Bureau Veritas, BSI, LSTI) est librement consultable en ligne sur le portail ministériel de l'ANS :  
+> La liste exhaustive des hébergeurs certifiés HDS délivrée par les organismes accrédités (BYCYB, BSI Group, AFNOR, Bureau Veritas) est librement consultable en ligne sur le portail ministériel de l'ANS :  
 > 👉 [https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies)
 
 ------------------------------------------------------------------------
 
-## 3. Matrice des 6 Activités du Référentiel HDS
+## 3. Matrice des Activités du Référentiel HDS (Complémentarité Parfaite)
 
-Le référentiel HDS de l'ANS définit 6 activités réglementaires. La chaîne de confiance MacroscopiX couvre l'ensemble de ce périmètre :
+Le référentiel HDS de l'ANS définit 6 activités réglementaires. Le couple **Scalingo + Scaleway** assure une couverture totale et rigoureusement conforme :
 
-| Activité HDS | Libellé Réglementaire | Prestataire Couvrant |
-|---|---|---|
-| **Activité 1** | Mise à disposition et maintien en condition opérationnelle (MCO) des sites physiques | Scalingo / Scaleway |
-| **Activité 2** | Mise à disposition et MCO des infrastructures matérielles | Scalingo / Scaleway |
-| **Activité 3** | Mise à disposition et MCO de la plateforme d'hébergement applicative | Scalingo |
-| **Activité 4** | Mise à disposition et MCO de l'infrastructure virtuelle | Scalingo / Scaleway |
-| **Activité 5** | Administration et exploitation du système d'information | Scalingo / Scaleway |
-| **Activité 6** | Sauvegarde et réplication externalisée | Scaleway (Object Storage Multi-AZ) |
+| Activité HDS | Libellé Réglementaire de l'ANS | Prestataire Assurant le Périmètre | Organisme Certificateur |
+|---|---|---|---|
+| **Activité 1** | Mise à disposition et maintien en condition opérationnelle (MCO) des sites physiques | Scaleway & Scalingo | BSI Group / BYCYB |
+| **Activité 2** | Mise à disposition et MCO des infrastructures matérielles | Scaleway & Scalingo | BSI Group / BYCYB |
+| **Activité 3** | Mise à disposition et MCO de la plateforme d'hébergement applicative | Scaleway & Scalingo | BSI Group / BYCYB |
+| **Activité 4** | Mise à disposition et MCO de l'infrastructure virtuelle | Scaleway & Scalingo | BSI Group / BYCYB |
+| **Activité 5** | Administration et exploitation du système d'information | **Scalingo** *(Infogéreur certifié)* | BYCYB |
+| **Activité 6** | Sauvegarde et réplication externalisée | **Scalingo** *(Couverture globale du flux)* | BYCYB |
 
 ------------------------------------------------------------------------
 
