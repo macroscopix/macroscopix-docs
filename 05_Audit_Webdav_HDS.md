@@ -8,7 +8,7 @@
 
 L'infrastructure repose sur une chaîne de confiance certifiée **HDS (Hébergeur de Données de Santé)** et **ISO 27001**, garantissant la souveraineté et la sécurité des données traitées :
 - **Serveur de Transit (Logique métier) :** Scalingo (PaaS certifié HDS, hébergé en France).
-- **Stockage Objet (Persistance temporaire) :** Hosteur (S3 certifié HDS, datacenters souverains en France).
+- **Stockage Objet (Persistance temporaire) :** Scaleway (S3 Object Storage certifié HDS, région Paris `fr-par`, datacenters souverains en France).
 
 ---
 

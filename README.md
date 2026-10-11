@@ -13,6 +13,7 @@
 - **Audit Admin** ([Version MD](./04_Audit_Admin.md) | [Version Word](./docx/04_Audit_Admin.docx))
 - **Audit WebDAV HDS** ([Version MD](./05_Audit_Webdav_HDS.md) | [Version Word](./docx/05_Audit_Webdav_HDS.docx))
 - **Audit Sync Service** ([Version MD](./06_Audit_Sync_Service.md) | [Version Word](./docx/06_Audit_Sync_Service.docx))
+- **Conformité & Certifications HDS** ([Version MD](./07_Conformite_HDS.md) | [Version Word](./docx/07_Conformite_HDS.docx))
 - **Schémas d'Architecture** ([Archi.png](./Archi.png))
 
 ---
@@ -37,7 +38,7 @@ La sécurité est au cœur de la conception "Security by Design" de MacroscopiX 
 
 ## 4. Modalités d'Hébergement
 La solution offre une flexibilité totale pour s'adapter aux politiques des DSI hospitalières :
-- **Option Cloud HDS (Recommandée)** : Transit assuré sur des infrastructures souveraines certifiées Hébergeur de Données de Santé en France (Scalingo PaaS HDS + Hosteur S3 HDS). L'agent local rapatrie les flux par HTTPS sortant sans nécessiter d'ouverture de port pare-feu.
+- **Option Cloud HDS (Recommandée)** : Transit assuré sur des infrastructures souveraines certifiées Hébergeur de Données de Santé en France (Scalingo PaaS HDS + Scaleway S3 HDS). L'agent local rapatrie les flux par HTTPS sortant sans nécessiter d'ouverture de port pare-feu.
 - **Option On-Premise (Déléguée)** : Installation de l'instance de transit directement sur l'infrastructure interne du CHU, sous le contrôle exclusif de la DSI.
 
 ## 5. État des Fonctionnalités (Production vs R&D)

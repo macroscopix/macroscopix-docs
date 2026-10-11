@@ -187,7 +187,7 @@ La solution offre deux modes de déploiement pour s'adapter aux
 politiques de sécurité de l'établissement :
 
 1.  **Modèle Standard (Cloud HDS) :** Le transit est assuré par les
-    serveurs certifiés MacroscopiX (Scalingo compute HDS + Hosteur S3 HDS). Le service
+    serveurs certifiés MacroscopiX (Scalingo compute HDS + Scaleway S3 HDS). Le service
     **MacroscopixSync** assure la passerelle descendante vers le stockage local via un flux
     HTTPS sortant exclusif.
 
@@ -260,9 +260,9 @@ La solution met en œuvre un principe strict de **non-persistance des données d
   - Les fichiers entrants transitent exclusivement dans des buffers mémoires (`BytesIO`). Aucun fichier temporaire ou résidu n'est écrit sur le système de fichiers de l'instance d'exécution.
 - **Double Mécanisme de Purge Cloud :**
   1. **Purge Immédiate par l'Agent Local (Nominale) :** Dès que l'agent `MacroscopixSync` a rapatrié le fichier sur le stockage de l'établissement et validé son intégrité octet par octet (`Content-Length`), il envoie immédiatement une commande HTTP `DELETE`. Le fichier est instantanément supprimé du bucket S3 HDS.
-  2. **Purge Automatique Programmée (Filet de sécurité Lifecycle 24h) :** Une règle de cycle de vie (**S3 Lifecycle Policy**) est configurée nativement sur le stockage objet HDS (Hosteur). Tout fichier présent depuis plus de 24 heures (ex. en cas de panne prolongée ou de coupure réseau du poste hospitalier) est **détruit automatiquement et irréversiblement** sans intervention humaine.
+  2. **Purge Automatique Programmée (Filet de sécurité Lifecycle 24h) :** Une règle de cycle de vie (**S3 Lifecycle Policy**) est configurée nativement sur le stockage objet HDS (Scaleway). Tout fichier présent depuis plus de 24 heures (ex. en cas de panne prolongée ou de coupure réseau du poste hospitalier) est **détruit automatiquement et irréversiblement** sans intervention humaine.
 - **Sécurité et Souveraineté du Stockage :**
-  - Hébergement 100 % français sur infrastructures certifiées **HDS (Hébergeur de Données de Santé)** et ISO 27001.
+  - Hébergement 100 % français sur infrastructures certifiées **HDS (Hébergeur de Données de Santé)** et ISO 27001 (Scalingo / Scaleway).
   - Chiffrement natif au repos AES-256 (SSE-S3).
   - Cloisonnement étanche : chaque établissement dispose d'un espace racine isolé et d'un jeton d'accès exclusif (`chroot`).
 
@@ -296,7 +296,7 @@ La solution met en œuvre un principe strict de **non-persistance des données d
 |---|---|
 | **Droit à l'effacement** | Suppression automatique du Cloud HDS immédiatement après rapatriement et vérification par le CHU. Purge de sécurité programmée (24h) via Lifecycle Policy S3. |
 | **Minimisation des données** | Conservation exclusive de journaux techniques anonymisés (horodatage, volumétrie, UUID terminal). Aucune donnée d'identification patient dans les bases centrales. |
-| **Souveraineté** | Données de santé (photos, audio, PDF) traitées et hébergées 100 % en France sur des datacenters certifiés HDS (Scalingo / Hosteur). Les métadonnées administratives sont hébergées chez Infomaniak (Suisse). |
+| **Souveraineté** | Données de santé (photos, audio, PDF) traitées et hébergées 100 % en France sur des datacenters certifiés HDS (Scalingo / Scaleway). Les métadonnées administratives sont hébergées chez Infomaniak (Suisse). |
 | **Traçabilité** | Conservation des journaux techniques de transfert pendant 12 mois. |
 
 ## 6. Prérequis côté CHU
