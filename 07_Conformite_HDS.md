@@ -20,13 +20,13 @@ Toutes les données de santé transitant par MacroscopiX sont traitées et stock
 
 | Fournisseur | Rôle dans l'Architecture | Datacenters | Certifications Détenues | Référencement Officiel ANS |
 |---|---|---|---|---|
-| **SCALINGO** (Scalingo SAS) | **Serveur de Calcul WebDAV** (Compute, traitement en mémoire vive RAM) | Paris / Roubaix (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• Hébergeur d'Infrastructures & Infogéreur | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/labels-certifications/hds/liste-des-hebergeurs-certifies) |
-| **SCALEWAY** (Scaleway SAS - Groupe iliad) | **Stockage Objet S3 HDS** (Chiffrement AES-256 natif au repos, rétention tampon) | Région Paris `fr-par` / DC2-DC3-DC5 (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• **ISO 50001** / Souveraineté UE | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/labels-certifications/hds/liste-des-hebergeurs-certifies) |
+| **SCALINGO** (Scalingo SAS) | **Serveur de Calcul WebDAV** (Compute, traitement en mémoire vive RAM) | Paris / Roubaix (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• Hébergeur d'Infrastructures & Infogéreur | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
+| **SCALEWAY** (Scaleway SAS - Groupe iliad) | **Stockage Objet S3 HDS** (Chiffrement AES-256 natif au repos, rétention tampon) | Région Paris `fr-par` / DC2-DC3-DC5 (France) | • **HDS v2.0** (Activités 1 à 6)<br>• **ISO 27001:2022**<br>• **ISO 50001** / Souveraineté UE | [Consulter sur esante.gouv.fr](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies) |
 | **INFOMANIAK** (Infomaniak Network SA) | **Serveur d'Enrôlement / Gestion Admin** *(Hors périmètre HDS : 0 donnée de santé)* | Genève (Suisse, adéquation RGPD) | • **ISO 27001**<br>• **ISO 9001**<br>• Tier III+ souverain | *N/A (Uniquement métadonnées techniques)* |
 
 > **Lien officiel de vérification de l'État :**  
-> La liste exhaustive des hébergeurs certifiés HDS délivrée par les organismes accrédités (AFNOR, Bureau Veritas, BSI, LSTI) est librement consultable en ligne sur le portail ministériel :  
-> 👉 [https://esante.gouv.fr/labels-certifications/hds/liste-des-hebergeurs-certifies](https://esante.gouv.fr/labels-certifications/hds/liste-des-hebergeurs-certifies)
+> La liste exhaustive des hébergeurs certifiés HDS délivrée par les organismes accrédités (AFNOR, Bureau Veritas, BSI, LSTI) est librement consultable en ligne sur le portail ministériel de l'ANS :  
+> 👉 [https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies](https://esante.gouv.fr/offres-services/hds/liste-des-hebergeurs-certifies)
 
 ------------------------------------------------------------------------
 
