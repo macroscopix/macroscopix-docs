@@ -81,3 +81,59 @@ Pour fluidifier au maximum le travail du technicien et améliorer la qualité bi
 - **Intégration Flux Vidéo (Live Camera) :** Remplacer la "prise de photo" par une caméra montée en potence. L'écran tactile affiche la vidéo en direct. Un bouton "Capturer et Analyser" fige l'image, l'envoie au modèle et affiche instantanément les boîtes correctibles sur l'écran tactile.
 - **Interopérabilité HL7 :** Ajout d'un bouton "Envoyer" à la fin du flux DictAI pour transmettre automatiquement le compte-rendu macroscopique finalisé vers le Système de Gestion de Laboratoire (SGL / LIS) tiers.
 - **Évolution IA vers la Segmentation :** Passer de YOLO "Détection" (bounding boxes) à YOLO "Segmentation" (polygones). Cela permettra de mesurer précisément les fragments courbes ou positionnés en biais grâce au calcul du rectangle orienté minimum (minAreaRect) et de la squelettisation.
+
+---
+
+## Phase 5 : Feuille de Route Architecture & Simplification Système (v3.0)
+
+Cette section planifie la simplification technique et la rationalisation de l'infrastructure globale MacroscopiX en vue du passage à l'échelle industrielle ou d'une cession/partenariat de licence (ex. CliniSys).
+
+### 1. Simplification du Transit Données : Suppression de WebDAV et Passage aux Presigned URLs S3
+
+* **Architecture actuelle :**  
+  Mobile $\rightarrow$ Passerelle WebDAV (Python WsgiDAV Scalingo) $\rightarrow$ Buffer RAM $\rightarrow$ Boto3 vers S3 Scaleway $\rightarrow$ Agent local Windows via requêtes WebDAV.
+* **Problématique :**  
+  Nécessite un dyno/serveur de calcul dédié permanent, point de contention potentiel lors de téléversements simultanés volumineux (PDF, audio WAV, images HD).
+* **Cible v3.0 (Cloud Native S3 Direct) :**
+  1. L'application mobile contacte l'API FastAPI : `POST /media/upload-url` avec les métadonnées (nom de fichier, type MIME, taille).
+  2. L'API génère une **URL pré-signée S3 Scaleway temporaire (Presigned PUT URL)** avec signature cryptographique HMAC valide 5 à 10 minutes.
+  3. Le terminal téléverse directement le flux chiffré vers le bucket Scaleway S3 HDS en HTTPS standard.
+  4. L'agent Windows `MacroscopixSync` récupère la liste des objets via l'API et télécharge directement les fichiers depuis S3 (via URL GET pré-signée ou compte de service restreint).
+* **Bénéfices :**
+  - **Suppression intégrale du serveur WebDAV intermédiaire** (zéro maintenance WsgiDAV/Cheroot).
+  - Économie directe de coûts de calcul (PaaS).
+  - Bande passante et scalabilité maximales adossées à l'infrastructure réseau de Scaleway.
+
+### 2. Unification de la Stack Backend & Administration (Full Python)
+
+* **Architecture actuelle :**  
+  - API Dispatcher : FastAPI (Python 3.x).
+  - Console d'administration Web : PHP 8.x + templates classiques.
+  - Deux codebases distincts interagissant avec la même base de données PostgreSQL.
+* **Cible v3.0 :**
+  - Rapatriement de la console d'administration au sein du projet FastAPI (soit via une interface d'administration intégrée type SQLAdmin/FastAPI-Admin, soit via un dashboard léger Vue.js/React consommant l'API).
+* **Bénéfices :**
+  - **Unicité technologique :** 100 % Python (FastAPI / SQLAlchemy / Pydantic).
+  - Fin de la duplication des modèles de données et requêtes SQL entre PHP et Python.
+  - Déploiement et conteneurisation simplifiés en une seule image Docker.
+
+### 3. Consolidation d'Hébergement Souverain : 100 % Scaleway HDS (France)
+
+* **Architecture actuelle :**  
+  - Infomaniak (Suisse) : API, Admin, PostgreSQL (Non-HDS).
+  - Scalingo (France) : Passerelle WebDAV (HDS v2.0).
+  - Scaleway (France) : S3 Object Storage (HDS v2.0).
+* **Cible v3.0 :**
+  - Rapatriement de l'ensemble de la stack chez **Scaleway France** (région Paris `fr-par`) :
+    - API FastAPI + Admin : Conteneur Serverless / Kapsule (Kubernetes) certifié HDS.
+    - Base de données PostgreSQL : Managed Database Scaleway.
+    - Stockage fichiers : Scaleway S3 Object Storage HDS.
+* **Bénéfices :**
+  - **Un seul fournisseur, une seule facture, une seule console Cloud.**
+  - **Blindage juridique face aux DSI/RSSI :** Élimine toute discussion sur la Suisse ou les serveurs non-HDS. L'argumentaire institutionnel tient en une phrase : *"Solution 100 % hébergée en France sur infrastructure souveraine Scaleway certifiée HDS v2.0 (BSI Group)."*
+
+### 4. Anonymisation Renforcée des Logs Techniques (Hashage SHA-256)
+
+* **Objectif :** Rendre la table `transfer_logs` totalement inattaquable sur le plan du RGPD et du secret médical.
+* **Mise en œuvre :** Le numéro d'examen/dossier patient (`folder_name`) n'est plus enregistré en clair, mais sous forme d'empreinte hachée salée (`SHA256(folder_name + salt_organisation)`).
+* **Bénéfice :** Garantit la traçabilité technique (vérification qu'un prélèvement a bien été transféré) sans aucune possibilité pour un tiers ou un auditeur externe de corréler le log sans accès interne au SGL du CHU.
