@@ -86,15 +86,14 @@ d'authentification et de journalisation technique**.
 
 - Usage unique pour récupération de configuration
 
-### 3.3 Terminal Secret
-
-- Secret unique généré via secrets.token_urlsafe(32)
-
-- Utilisé en **Bearer Token**
-
-- Révocable à tout moment
-
-- Aucun secret stocké côté client en clair
+### 3.3 Terminal Secret & Révocation
+- Secret unique généré via `secrets.token_urlsafe(32)`.
+- Utilisé en **Bearer Token** dans les en-têtes HTTP de requêtes.
+- **Révocation Instantanée (Deux voies possibles) :**
+  1. *Via le terminal lui-même :* Route `POST /revoke-terminal` (authentification par Bearer ou corps de requête) provoquant la suppression immédiate du secret et la déconnexion.
+  2. *Via l'administrateur / DSI :* Route `DELETE /terminals/{device_uuid}` (protégée par clé API admin) dissociant immédiatement l'appareil de l'organisation et libérant son slot de licence.
+- Invalidation idempotente : Tout appel ultérieur avec un secret révoqué retourne une erreur HTTP 401.
+- Aucun secret stocké côté client en clair (Android Keystore).
 
 ### 3.4 Binding des terminaux
 

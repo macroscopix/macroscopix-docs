@@ -43,12 +43,30 @@ associé à un jeton d'authentification délivré via l'API dédiée
 
 Cet identifiant est utilisé pour :
 - l'authentification de l'application,
-- le contrôle d'accès aux flux de données de santé (liaison stricte Device UUID / Organisation).
+- le contrôle d'accès aux flux de données de santé (liaison matérielle stricte Device UUID / Organisation).
 
-La révocation d'un terminal entraîne l'invalidation immédiate de son
-jeton d'accès.
+### 1.2 Cycle de vie et Procédure de Révocation des Terminaux
 
-### 1.2 BYOD et Mobilité Sécurisée
+La maîtrise de la flotte mobile et du parc BYOD impose des mécanismes de révocation instantanés et déterministes. MacroscopiX prend en compte tous les scénarios de rupture d'habilitation :
+
+#### Scénarios de Révocation et Réponses du Système
+
+1. **Perte, Vol ou Compromission du Terminal :**
+   - **Action Référent / Administrateur :** Depuis la console d'administration (`admin.macroscopix.fr`) ou via l'API sécurisée (`DELETE /terminals/{uuid}`), l'administrateur technique révoque le terminal en un clic.
+   - **Effet Serveur Immédiat :** Le `terminal_secret` (Bearer Token) est purgé de la table des terminaux autorisés et son statut bascule à inactif.
+   - **Blocage des Flux :** Toute tentative d'authentification (`/check-auth`) ou de journalisation (`/log-transfer`) est immédiatement rejetée avec une erreur **HTTP 401 Unauthorized**.
+   - **Dissociation Matérielle :** L'association entre le `device_uuid` matériel et l'établissement est rompue, libérant instantanément le slot de licence de l'organisation (`max_slots`).
+   - **Protection des Données :** En vertu du principe de **Zéro Persistance**, aucun cliché, dictée ou document médical ne réside sur le stockage interne ou dans la galerie du téléphone égaré.
+
+2. **Désinstallation ou Réinitialisation par l'Utilisateur :**
+   - **Côté Terminal Mobile :** La désinstallation de l'application détruit définitivement les clés privées et secrets d'accès logés dans le **Keystore Android** sécurisé.
+   - **Révocation Volontaire (Déconnexion de l'App) :** L'application dispose d'un bouton de déconnexion / désenrôlement explicite appelant la route `/revoke-terminal` (avec en-tête `Authorization: Bearer <secret>`). Le secret de session est instantanément invalidé en base centrale et le cache sandbox local est intégralement purgé.
+
+3. **Renouvellement d'Appareil / Ré-enrôlement :**
+   - Si un utilisateur change de smartphone ou le réinitialise (générant un nouvel UUID), un nouvel OTP envoyé à l'adresse institutionnelle nominative du référent est requis pour valider le nouveau couple matériel.
+   - L'ancien terminal peut être soit écrasé proprement via le même nom d'équipement (`friendly_name`), soit révoqué préalablement pour libérer le quota de licences.
+
+### 1.3 BYOD et Mobilité Sécurisée
 
 L'application MacroscopiX a été conçue pour un accès BYOD (Bring Your
 Own Device) lorsque cela est compatible avec la politique du Système
@@ -66,7 +84,7 @@ Cette approche permet aux praticiens d'utiliser leurs smartphones
 tout en assurant la sécurité, la traçabilité et la
 conformité HDS des données de santé.
 
-### 1.3 Contexte clinique et flux de travail multi-modal
+### 1.4 Contexte clinique et flux de travail multi-modal
 
 L'application est destinée à être utilisée en **laboratoire d'Anatomie
 et Cytologie Pathologiques (ACP)**, environnement technique contraint
@@ -120,7 +138,7 @@ Workflow sécurisé type :
   de quarantaine (`_quarantine`) côté client local, interdisant le rapatriement ou
   l'effacement de fichiers mis à l'isolement sur le cloud.
 
-### 1.4 Enjeux et bénéfices institutionnels
+### 1.5 Enjeux et bénéfices institutionnels
 
 Le déploiement de MacroscopiX répond à plusieurs objectifs stratégiques
 pour l'établissement :

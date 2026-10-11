@@ -56,7 +56,12 @@ L'application applique strictement le principe du moindre privilège :
   - Négociation forcée en **TLS 1.2 / TLS 1.3** avec validation stricte de la chaîne d'autorité de certification.
   - Timeouts étendus (120 secondes sur OkHttp) évitant les abandons de requêtes lors des commutations d'antennes ou de bornes Wi-Fi hospitalières.
 
-### 2.3 Dépendances et Tiers
+### 2.3 Gestion de la Révocation et Perte d'Appareil
+- **Révocation Active (Désenrôlement par l'utilisateur)** : L'application intègre une fonction de déconnexion volontaire qui sollicite l'API `/revoke-terminal`, révoquant immédiatement le jeton d'accès côté serveur, détruisant les clés matérielles du Keystore et vidant intégralement le répertoire de cache.
+- **Révocation Subie (Interdiction côté Serveur / Perte / Vol)** : À chaque tentative d'interaction ou de synchronisation, l'application vérifie son statut (`/check-auth`). Si le terminal a été révoqué par la DSI, le serveur renvoie une erreur HTTP 401. L'application bloque immédiatement l'interface utilisateur, détruit les secrets résiduels et bascule sur l'écran d'enrôlement initial.
+- **Désinstallation de l'Application** : La suppression de l'application entraîne l'effacement irrémédiable de son conteneur isolé (sandbox), supprimant tout secret d'authentification sans persistance dans le système.
+
+### 2.4 Dépendances et Tiers
 
 - Librairies tierces sélectionnées selon les standards de l'ANSSI / OWASP Mobile Security :
   - `com.squareup.okhttp3` / `retrofit2` : Communications HTTP sécurisées sans dépendances superflues.
