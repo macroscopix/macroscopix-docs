@@ -240,7 +240,9 @@ CHU. L'ensemble des connexions est initié en sortie (HTTPS standard sortant por
 - **Absence de stockage local :** Aucune inscription dans la galerie publique Android
   ni dans les répertoires partagés du système.
 - **Protection des secrets :** Stockage des identifiants et jetons dans
-  le Android Keystore avec protection matérielle (TEE / StrongBox).
+  le répertoire privé isolé de l'application (Jetpack DataStore, sandbox
+  Android). *(Évolution planifiée : chiffrement applicatif adossé au
+  Keystore Android).*
 - **Obfuscation du code :** Minification et obfuscation complètes via R8 / ProGuard.
 - **Résilience réseau :** Timeouts HTTP calibrés à 120s pour sécuriser les téléversements
   de fichiers volumineux (PDF multi-pages, audio WAV) sans corruption.

@@ -117,3 +117,16 @@ Ce document définit la trajectoire d'évolution technologique, architecturale e
 1. **Intégration Vidéo Potence (Live Camera) :** Flux vidéo continu sur écran tactile de paillasse avec bouton "Figer & Mesurer" sans contact.
 2. **Interopérabilité HL7 / FHIR :** Connecteurs directs pour injection des résultats structurés et comptes-rendus dans les SGL leaders du marché sans intermédiaire de fichiers.
 3. **IA par Segmentation Polygonale (Masks) :** Transition de YOLO Détection (rectangles) à YOLO Segmentation (polygones) pour épouser fidèlement les fragments courbés et calculer les surfaces réelles et axes de squelettisation.
+
+---
+
+## Sécurité & Durcissement (Backlog Technique)
+- **Passerelle WebDAV-S3 (`webdavs3`) — Validation `libmagic` & Liste blanche :**
+  - Ajouter `python-magic` (`libmagic`) dans `webdavs3/requirements.txt` et implémenter une inspection réelle du type MIME sur le buffer mémoire dans `S3Writer.close()` (`webdavs3/server.py`).
+  - Rejeter explicitement toute extension ou type MIME hors liste blanche autorisée (`.jpg`, `.jpeg`, `.pdf`, `.m4a`, `.mp3`) au lieu du fallback `application/octet-stream`.
+- **Séparation des clés API & Plan de migration sans coupure (`api`, `app`, `syncservice`) :**
+  1. **Étape 1 (API — rétrocompatible) :** Retirer `verify_api_key` de `/request-otp` dans `api/main.py` et le remplacer par un *rate limiting* strict (par IP et par e-mail). Les clients déjà déployés continuent de s'enrôler normalement.
+  2. **Étape 2 (Serveurs — sans impact prod) :** Effectuer une rotation immédiate de `MACROSCOPIX_API_KEY` uniquement côté serveurs (`api`, `webdavs3`, `worker`, `admin`). Les terminaux déjà enrôlés au CHU utilisent `terminal_secret` / WebDAV Basic Auth et ne subissent aucune coupure.
+  3. **Étape 3 (Clients — prochaine release) :** Retirer `API_KEY` de `app/api/RetrofitClient.kt` et `syncservice/Macroscopix.Sync.Core/Client/MacroscopixApiClient.cs` lors d'une mise à jour standard (Play Store / setup PC).
+- **Chiffrement des secrets locaux sur Android (`app`) :**
+  - Chiffrer les secrets (`webdav_password`, `terminal_secret`) stockés dans `DataStoreManager.kt` via une clé AES-GCM hébergée dans **Android Keystore** (ou `EncryptedSharedPreferences` / Google Tink), avec migration transparente des préférences existantes au premier lancement pour éviter tout ré-enrôlement.

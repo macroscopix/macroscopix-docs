@@ -35,14 +35,10 @@ L'architecture est strictement **sans état (stateless)** et repose sur un princ
 ## 3. Contrôle des Opérations et Filtrage
 
 ### 3.1 Intégrité et Validation Applicative
-- **Validation de Seuil de Données :** Rejet systématique de tout flux inférieur à 100 octets pour éliminer les paquets HTTP fantômes.
-- **Filtrage par Liste Blanche d'Extensions :** Seules les extensions médicales reconnues sont acceptées :
-  - Images macroscopiques : `.jpg`, `.jpeg`, `.png`
-  - Dictées vocales : `.wav`
-  - Numérisations documentaires : `.pdf`
-  - Les extensions exécutables (`.exe`, `.bat`, `.sh`, `.py`, `.dll`) ou suspectes sont immédiatement rejetées avec un code HTTP 403 / 415.
-- **Vérification MIME "Deep Inspection" :** Utilisation de `libmagic` pour analyser les octets d'en-tête (Magic Numbers) et valider la signature binaire réelle avant tout dépôt sur S3.
-- **Contrôle de Volumétrie :** Limitation stricte de la taille des requêtes pour prévenir les saturations mémoires.
+- **Validation de Seuil et d'Intégrité :** Le logiciel rejette systématiquement tout flux inférieur à 100 octets, vérifie la complétude par rapport au `CONTENT_LENGTH` déclaré (protection contre les uploads tronqués) et rejette les paquets contaminés par des trailers HTTP (`x-amz`).
+- **Validation de Signature JPEG :** Pour les fichiers `.jpg` / `.jpeg`, le serveur contrôle les *magic bytes* (`FF D8`) avant le dépôt sur S3.
+- **Typage MIME par Extension :** Le `Content-Type` S3 est déterminé selon l'extension (`.jpg`/`.jpeg`, `.pdf`, `.mp3`/`.m4a`, `application/octet-stream` par défaut). *(À venir : filtrage strict par liste blanche d'extensions et inspection MIME approfondie via `libmagic`)*.
+- **Contrôle de Volumétrie :** Limitation stricte de la taille des fichiers (`MAX_FILE_SIZE = 500 Mo`) pour prévenir les attaques par déni de service (DoS).
 
 ### 3.2 Mécanisme de Quarantaine Cloud et Sécurité Sanitaire
 - **Mise à l'écart (`_quarantine`) :** En cas d'incohérence détectée (signature binaire non conforme, fichier malformé ou paquet suspect), le système déplace le fichier dans un dossier isolé de quarantaine (`_quarantine`) sur le stockage cloud.
