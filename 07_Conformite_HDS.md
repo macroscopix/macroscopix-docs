@@ -57,12 +57,3 @@ Le référentiel HDS de l'ANS définit 6 activités réglementaires. Le couple *
    - Au repos : Chiffrement natif AES-256 (SSE-S3) sur les disques physiques des datacenters.
 4. **Cloisonnement Hermétique Multi-Établissements :**  
    Chaque CHU possède son jeton technique dédié et une racine de stockage verrouillée (`chroot`). Aucune visibilité transversale n'est possible entre les données de différents hôpitaux.
-
-------------------------------------------------------------------------
-
-## 5. Synthèse pour le DPO et le RSSI
-
-- **Localisation des Données Médicales :** 100 % France (Datacenters certifiés).
-- **Conformité Réglementaire :** Conforme Art. L. 1111-8 CSP et RGPD (Art. 28, 32).
-- **Statut HDS :** Porté par des acteurs certifiés HDS de plein droit inscrits sur la liste ANS.
-- **Réversibilité / Restitution :** Les données étant immédiatement rapatriées dans le SIH de l'établissement, le CHU conserve 100 % de la propriété et de la maîtrise souveraine de ses clichés et enregistrements.
