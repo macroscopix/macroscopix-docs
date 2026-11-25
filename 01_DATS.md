@@ -2,8 +2,8 @@
 
 **Projet :** MacroscopiX\
 **Version :** 2.5 (Production)\
-**Date :** 11 octobre 2026\
-**Confidentialité :** Interne / Diffusion restreinte -- DSI / RSSI CHU
+**Date :** 25 novembre 2026\
+**Confidentialité :** Interne / Diffusion restreinte -- DSI / RSSI Établissement (AP-HP)
 
 ------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ La maîtrise de la flotte mobile et du parc BYOD impose des mécanismes de révo
    - **Protection des Données :** En vertu du principe de **Zéro Persistance**, aucun cliché, dictée ou document médical ne réside sur le stockage interne ou dans la galerie du téléphone égaré.
 
 2. **Désinstallation ou Réinitialisation par l'Utilisateur :**
-   - **Côté Terminal Mobile :** La désinstallation de l'application détruit définitivement les clés privées et secrets d'accès logés dans le **Keystore Android** sécurisé.
+   - **Côté Terminal Mobile :** La désinstallation de l'application détruit définitivement le bac à sable applicatif privé (sandbox DataStore) et les secrets d'accès associés.
    - **Révocation Volontaire (Déconnexion de l'App) :** L'application dispose d'un bouton de déconnexion / désenrôlement explicite appelant la route `/revoke-terminal` (avec en-tête `Authorization: Bearer <secret>`). Le secret de session est instantanément invalidé en base centrale et le cache sandbox local est intégralement purgé.
 
 3. **Renouvellement d'Appareil / Ré-enrôlement :**
@@ -103,7 +103,7 @@ Workflow sécurisé type :
     - **Photographies macroscopiques** : Clichés haute résolution des pièces opératoires
       et prélèvements avec recadrage et balance des blancs optimisée.
     - **Dictaphone intégré** : Enregistrement vocal des descriptions macroscopiques
-      (format WAV audio haute fidélité) rattaché au numéro de prélèvement.
+      (format audio standard M4A/AAC ou WAV) rattaché au numéro de prélèvement.
     - **Scanner documentaire** : Numérisation des ordonnances, comptes-rendus extérieurs
       ou feuilles de transmission au format PDF multi-pages.
 
@@ -178,8 +178,7 @@ La solution s'articule autour de deux environnements isolés :
   est dite **stateless** : les données sont purgées dès que le transfert
   vers le SIH est validé octet par octet.
 
-![](media/image1.png){width="6.497222222222222in"
-height="3.6534722222222222in"}
+![](Archi.png)
 
 ### 2.2 Flexibilité d'Hébergement et Responsabilités
 
@@ -192,22 +191,22 @@ politiques de sécurité de l'établissement :
     HTTPS sortant exclusif.
 
 2.  **Modèle Délégué (On-Premise) :** L'environnement de transit est
-    hébergé directement par le CHU (via une URL WebDAV interne en
+    hébergé directement par l'établissement (via une URL WebDAV interne en
     HTTPS). Dans cette configuration :
     - Le service **MacroscopixSync** peut être utilisé en réseau local ou remplacé par
-      les scripts de transfert internes du CHU.
+      les scripts de transfert internes de l'établissement.
     - La sécurité périmétrique (WAF, reverse proxy, filtrage IP,
       limitation de débit) et la conformité HDS incombent alors
-      entièrement à la DSI du CHU.
+      entièrement à la DSI de l'établissement.
 
 ### 2.3 Connectivité et Politique d'Usage (BYOD vs Flotte Institutionnelle)
 
 - **Scénario BYOD (4G/5G / Wi-Fi Invité) :**
   L'utilisation de terminaux mobiles professionnels ou personnels est sécurisée par le fait
   qu'aucun fichier ne persiste en mémoire flash locale (purge mémoire immédiate après téléversement),
-  les identifiants sont protégés par le Keystore matériel, et tous les flux sont chiffrés en TLS 1.2/1.3.
+  les identifiants sont confinés dans le bac à sable applicatif privé, et tous les flux sont chiffrés en TLS 1.2/1.3.
 
-- **Réseau Wi-Fi CHU :**
+- **Réseau Wi-Fi Hospitalier :**
   Si le terminal est raccordé au réseau Wi-Fi hospitalier, les flux sortants vers les sous-domaines
   `*.macroscopix.fr` sur le port 443 doivent être autorisés sur le filtrage réseau / proxy de l'établissement.
   L'application intègre des délais de garde réseau étendus (120 secondes) évitant les échecs lors des
@@ -220,13 +219,13 @@ politiques de sécurité de l'établissement :
 | Source | Destination | Protocole | Port | Description | Données de santé |
 |---|---|---|---|---|---|
 | Application Android | API d'enrôlement (`api.macroscopix.fr`) | HTTPS | 443 | Configuration, OTP, vérification token, logs techniques anonymisés | Non |
-| Application Android | Serveur WebDAV (`hds.macroscopix.fr`) | HTTPS | 443 | Téléversement (PUT) des photos, fichiers audio WAV et documents PDF | Oui |
+| Application Android | Serveur WebDAV (`hds.macroscopix.fr`) | HTTPS | 443 | Téléversement (PUT) des photos, fichiers audio (M4A/WAV) et documents PDF | Oui |
 | Agent MacroscopixSync (Windows) | Serveur WebDAV (`hds.macroscopix.fr`) | HTTPS | 443 | Téléchargement séquentiel (GET), vérification de taille, et suppression (DELETE) | Oui |
-| Agent MacroscopixSync (Windows) | Stockage Local CHU (NAS / SGL) | SMB v3 / NTFS | 445 / Local | Dépôt ventilé des fichiers (Images, PDF, Audio) | Oui (Intra-CHU) |
+| Agent MacroscopixSync (Windows) | Stockage Local Établissement (NAS / SGL) | SMB v3 / NTFS | 445 / Local | Dépôt ventilé des fichiers (Images, PDF, Audio) | Oui (Intra-site) |
 | Console d'administration | API d'enrôlement | HTTPS | 443 | Gestion des licences et des terminaux | Non |
 
-**Note importante :** aucun flux entrant n'est requis sur le pare-feu du
-CHU. L'ensemble des connexions est initié en sortie (HTTPS standard sortant port 443).
+**Note importante :** aucun flux entrant n'est requis sur le pare-feu de
+l'établissement. L'ensemble des connexions est initié en sortie (HTTPS standard sortant port 443).
 
 ------------------------------------------------------------------------
 
@@ -245,7 +244,7 @@ CHU. L'ensemble des connexions est initié en sortie (HTTPS standard sortant por
   Keystore Android).*
 - **Obfuscation du code :** Minification et obfuscation complètes via R8 / ProGuard.
 - **Résilience réseau :** Timeouts HTTP calibrés à 120s pour sécuriser les téléversements
-  de fichiers volumineux (PDF multi-pages, audio WAV) sans corruption.
+  de fichiers volumineux (PDF multi-pages, audio M4A/WAV) sans corruption.
 
 ### 4.2 Sécurité des communications
 
@@ -274,7 +273,7 @@ La solution met en œuvre un principe strict de **non-persistance des données d
   anormaux par les contrôles d'intégrité cloud sont déplacés dans un dossier isolé `_quarantine`.
 - **Exclusion stricte côté agent local :** L'agent Windows `MacroscopixSync` filtre et ignore
   rigoureusement tout dossier ou fichier contenant `quarantine` ou `_quarantine`. Ces fichiers ne sont
-  jamais rapatriés sur le réseau du CHU et ne sont jamais supprimés par l'agent de synchronisation.
+  jamais rapatriés sur le réseau de l'établissement et ne sont jamais supprimés par l'agent de synchronisation.
 - **Contrôle d'intégrité de transfert :** L'agent compare la taille exacte du fichier téléchargé
   avec l'en-tête `Content-Length` émis par le serveur WebDAV. En cas d'écart (téléchargement partiel),
   le fichier local temporaire `.tmp` est détruit et le fichier distant est conservé intact pour un
@@ -296,12 +295,12 @@ La solution met en œuvre un principe strict de **non-persistance des données d
 
 | Exigence | Mise en œuvre |
 |---|---|
-| **Droit à l'effacement** | Suppression automatique du Cloud HDS immédiatement après rapatriement et vérification par le CHU. Purge de sécurité programmée (24h) via Lifecycle Policy S3. |
+| **Droit à l'effacement** | Suppression automatique du Cloud HDS immédiatement après rapatriement et vérification par l'établissement. Purge de sécurité programmée (24h) via Lifecycle Policy S3. |
 | **Minimisation des données** | Conservation exclusive de journaux techniques anonymisés (horodatage, volumétrie, UUID terminal). Aucune donnée d'identification patient dans les bases centrales. |
 | **Souveraineté** | Données de santé (photos, audio, PDF) traitées et hébergées 100 % en France sur des datacenters certifiés HDS (Scalingo / Scaleway). Les métadonnées administratives sont hébergées chez Infomaniak (Suisse). |
 | **Traçabilité** | Conservation des journaux techniques de transfert pendant 12 mois. |
 
-## 6. Prérequis côté CHU
+## 6. Prérequis côté Établissement (AP-HP)
 
 1. **Poste ou VM de synchronisation** (Windows 10/11 ou Windows Server) disposant d'un accès
    Internet sortant HTTPS (port 443) et d'un accès en écriture sur le partage cible (SMB/NTFS).
