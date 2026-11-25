@@ -24,7 +24,7 @@ MacroscopiX est une solution mobile institutionnelle permettant l'acquisition s�
 ## 2. Architecture Technique
 L'écosystème repose sur quatre piliers étanches :
 1. **Terminal Mobile (Android)** : Application native (Jetpack Compose / Kotlin) gérant l'acquisition multi-modale (photos, audio, PDF) et le chiffrement en RAM/sandbox sans persistance sur le stockage de masse.
-2. **API Dispatcher (FastAPI)** : Orchestrateur central gérant l'authentification forte (OTP 6 chiffres, liaison matérielle UUID), la distribution des accès et les logs techniques anonymisés.
+2. **API Dispatcher (FastAPI)** : Orchestrateur central gérant l'authentification forte (OTP 6 chiffres, liaison matérielle UUID), la distribution des accès et les métadonnées techniques d'exploitation.
 3. **Serveur de Transit (WebDAV HDS / S3)** : Passerelle stateless avec buffering mémoire intégrale, filtrage MIME strict et zone d'isolement de sécurité (`_quarantine`).
 4. **Agent d'Intégration Local (Windows .NET 8)** : Agent résilient exécutable en service ou session utilisateur (Per-User), opérant en Pull sortant exclusif, avec contrôle d'intégrité octet par octet (`Content-Length`), exclusion catégorique des fichiers en quarantaine, et aiguillage multi-dépôts (Images, PDF, Audio normalisé).
 

@@ -169,8 +169,8 @@ entre la gestion administrative et le traitement des données de santé.
 La solution s'articule autour de deux environnements isolés :
 
 - **Zone d'Administration (Non-HDS) :** Ce périmètre gère exclusivement
-  les métadonnées techniques (enrôlement des terminaux, licences, logs
-  techniques anonymisés). Il ne voit jamais passer de données de santé,
+  les métadonnées techniques (enrôlement des terminaux, licences, métrologie
+  d'exploitation). Il ne voit jamais passer de données de santé,
   d'images ou d'enregistrements audio. L'accès administrateur est protégé par une
   authentification forte (2FA / TOTP).
 
@@ -220,7 +220,7 @@ politiques de sécurité de l'établissement :
 
 | Source | Destination | Protocole | Port | Description | Données de santé |
 |---|---|---|---|---|---|
-| Application Android | API d'enrôlement (`api.macroscopix.fr`) | HTTPS | 443 | Configuration, OTP, vérification token, logs techniques anonymisés | Non |
+| Application Android | API d'enrôlement (`api.macroscopix.fr`) | HTTPS | 443 | Configuration, OTP, vérification token, métadonnées techniques d'exploitation | Non |
 | Application Android | Serveur WebDAV (`hds.macroscopix.fr`) | HTTPS | 443 | Téléversement (PUT) des photos, fichiers audio (M4A/WAV) et documents PDF | Oui |
 | Agent MacroscopixSync (Windows) | Serveur WebDAV (`hds.macroscopix.fr`) | HTTPS | 443 | Téléchargement séquentiel (GET), vérification de taille, et suppression (DELETE) | Oui |
 | Agent MacroscopixSync (Windows) | Stockage Local Établissement (NAS / SGL) | SMB v3 / NTFS | 445 / Local | Dépôt ventilé des fichiers (Images, PDF, Audio) | Oui (Intra-site) |
@@ -298,7 +298,7 @@ La solution met en œuvre un principe strict de **non-persistance des données d
 | Exigence | Mise en œuvre |
 |---|---|
 | **Droit à l'effacement** | Suppression automatique du Cloud HDS immédiatement après rapatriement et vérification par l'établissement. Purge de sécurité programmée (24h) via Lifecycle Policy S3. |
-| **Minimisation des données** | Conservation exclusive de journaux techniques anonymisés (horodatage, volumétrie, UUID terminal). Aucune donnée d'identification patient dans les bases centrales. |
+| **Minimisation des données** | Conservation exclusive de métadonnées techniques d'exploitation (horodatage, volumétrie en octets, statut HTTP, UUID terminal). Aucune donnée nominative patient (ni nom, ni prénom, ni date de naissance, ni identifiant national de santé) n'est transmise ni stockée en base centrale. |
 | **Souveraineté** | Données de santé (photos, audio, PDF) traitées et hébergées 100 % en France sur des datacenters certifiés HDS (Scalingo / Scaleway). Les métadonnées administratives sont hébergées chez Infomaniak (Suisse). |
 | **Traçabilité** | Conservation des journaux techniques de transfert pendant 12 mois. |
 

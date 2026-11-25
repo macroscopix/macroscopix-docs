@@ -125,9 +125,9 @@ d'authentification et de journalisation technique**.
 
   - organization_id
 
-  - nom de fichier technique anonymisé
+  - référence technique de transaction
 
-  - dossier logique anonymisé
+  - typage de flux (Photos / PDF / Audio)
 
   - statut
 

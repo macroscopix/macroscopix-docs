@@ -54,7 +54,7 @@ L'architecture est strictement **sans état (stateless)** et repose sur un princ
 
 ### 4.1 Journalisation et Auditabilité (HDS)
 Le système maintient des journaux de traçabilité pendant 12 mois :
-- **Anonymisation :** Logs limités aux métadonnées techniques (UUID terminal, volumétrie en octets, horodatage, statut HTTP). Aucune donnée d'identification patient nominative n'est enregistrée.
+- **Métadonnées techniques d'exploitation :** Logs limités aux métadonnées techniques (UUID terminal, volumétrie en octets, horodatage, statut HTTP). Aucune donnée d'identification patient nominative n'est enregistrée.
 - **Vérification d'intégrité :** Émission de l'en-tête `Content-Length` exact permettant à l'agent local de valider l'intégrité binaire avant toute suppression du cloud.
 
 ### 4.2 Protection Active
