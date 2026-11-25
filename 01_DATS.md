@@ -3,14 +3,16 @@
 **Projet :** MacroscopiX\
 **Version :** 2.5 (Production)\
 **Date :** 25 novembre 2026\
-**Confidentialité :** Interne / Diffusion restreinte -- DSI / RSSI Établissement (AP-HP)
+**Origine :** Développé au CHU de Besançon (Service d'Anatomie et Cytologie Pathologiques)\
+**Confidentialité :** Interne / Diffusion restreinte -- DSI / RSSI Établissements de santé
 
 ------------------------------------------------------------------------
 
 ## 1. Présentation de la solution
 
-MacroscopiX est une solution mobile sécurisée permettant l'acquisition et
-le transfert de données médicales macroscopiques (photographies haute résolution,
+MacroscopiX est une solution mobile sécurisée, développée initialement au sein du CHU de Besançon
+pour répondre aux besoins opérationnels de son service d'Anatomie et Cytologie Pathologiques (ACP),
+permettant l'acquisition et le transfert de données médicales macroscopiques (photographies haute résolution,
 dictées vocales / comptes-rendus audio, et numérisations de documents / fiches de demande PDF)
 depuis un smartphone vers le Système d'Information Hospitalier (SIH),
 sans persistance des données sur le terminal (02_Audit_Mobile.md).
@@ -300,7 +302,7 @@ La solution met en œuvre un principe strict de **non-persistance des données d
 | **Souveraineté** | Données de santé (photos, audio, PDF) traitées et hébergées 100 % en France sur des datacenters certifiés HDS (Scalingo / Scaleway). Les métadonnées administratives sont hébergées chez Infomaniak (Suisse). |
 | **Traçabilité** | Conservation des journaux techniques de transfert pendant 12 mois. |
 
-## 6. Prérequis côté Établissement (AP-HP)
+## 6. Prérequis côté Établissement de santé
 
 1. **Poste ou VM de synchronisation** (Windows 10/11 ou Windows Server) disposant d'un accès
    Internet sortant HTTPS (port 443) et d'un accès en écriture sur le partage cible (SMB/NTFS).
